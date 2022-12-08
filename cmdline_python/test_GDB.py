@@ -34,6 +34,14 @@ def set_root():
     os.makedirs(f'test_info', exist_ok=True)
     return os.path.abspath(f'test_gdb'), os.path.abspath(f'test_info')
 
+def set_workbase(gdb_root: str, info_root: str, num_sum: int):
+    os.chdir(gdb_root)
+    os.makedirs(f'num_sum_CNO_{num_sum}')
+    gdb_path = os.path.abspath(f'num_sum_CNO_{num_sum}')
+    os.chdir(info_root)
+    os.makedirs(f'num_sum_CNO_{num_sum}')
+    info_path = os.path.abspath(f'num_sum_CNO_{num_sum}')
+    return gdb_path, info_path
 
 def set_sub_workbase(formula: str, gdb_path: str, info_path: str):
     os.chdir(gdb_path)
@@ -59,42 +67,49 @@ def get_formular(num_list: list, symbol_list: list):
 surge_path = r'..\bin\surge.exe'
 surge_path = os.path.abspath(surge_path)
 cmdline_list = [surge_path, '-S', '-Y', '-B1,2,3,4,5,6,7,8,9']
-num_sum_CNO = 4
-gdb_path, info_path = set_root()
+gdb_root, info_root = set_root()
 symbol_list = ['C', 'N', 'O', 'H']
-for num_C in range(num_sum_CNO + 1):
-    max_N = num_sum_CNO - num_C
-    for num_N in range(max_N + 1):
-        num_O = num_sum_CNO - num_N - num_C
-        all_H_nums = get_H_num(num_C=num_C, num_N=num_N, num_O=num_O)
-        if len(all_H_nums) == 0:
-            continue
-        a_CNO_formular = get_formular(num_list=[num_C, num_N, num_O], symbol_list=symbol_list)
-        sub_gdb_path, sub_info_path = set_sub_workbase(formula=a_CNO_formular, gdb_path=gdb_path, info_path=info_path)
-        for a_H_num in all_H_nums:
-            start_time = time.time()
-            #################### Start Run ####################
-            if a_H_num == 0:
-                a_formula = a_CNO_formular
-            else:
-                a_formula = a_CNO_formular + 'H' + str(a_H_num)
 
-            cmdline_list.append(a_formula)
-            smi_file = a_formula + '.smi'
-            cmdline_list.append('-o' + smi_file)
-            os.chdir(sub_gdb_path)
-            out = subprocess.run(cmdline_list, shell=True, capture_output=True)
-            del cmdline_list[-2:]
-            #################### Post-process ####################
-            if out.returncode != 0:
+max_num_sum_CNO = 4
+for num_sum_CNO in range(1, max_num_sum_CNO + 1):
+    gdb_path, info_path = set_workbase(gdb_root=gdb_root, info_root=info_root, num_sum=num_sum_CNO)
+    for num_C in range(num_sum_CNO + 1):
+        max_N = num_sum_CNO - num_C
+        for num_N in range(max_N + 1):
+            num_O = num_sum_CNO - num_N - num_C
+            all_H_nums = get_H_num(num_C=num_C, num_N=num_N, num_O=num_O)
+            if len(all_H_nums) == 0:
                 continue
-            if os.stat(smi_file).st_size == 0:
-                os.remove(smi_file)
-                continue
-            os.chdir(sub_info_path)
-            with open(a_formula, 'wb') as f:
-                f.write(out.stderr)
-            end_time = time.time()
-            duration = round(end_time - start_time, 2)
-            with open(a_formula, 'a') as f:
-                f.write('\nTime:\n'+str(duration)+'s\n')
+            a_CNO_formular = get_formular(num_list=[num_C, num_N, num_O], symbol_list=symbol_list)
+            sub_gdb_path, sub_info_path = set_sub_workbase(formula=a_CNO_formular, gdb_path=gdb_path,
+                                                           info_path=info_path)
+            for a_H_num in all_H_nums:
+                start_time = time.time()
+                #################### Start Run ####################
+                if a_H_num == 0:
+                    a_formula = a_CNO_formular
+                else:
+                    a_formula = a_CNO_formular + 'H' + str(a_H_num)
+
+                cmdline_list.append(a_formula)
+                smi_file = a_formula + '.smi'
+                cmdline_list.append('-o' + smi_file)
+                os.chdir(sub_gdb_path)
+                out = subprocess.run(cmdline_list, shell=True, capture_output=True)
+                del cmdline_list[-2:]
+                #################### Post-process ####################
+                if out.returncode != 0:
+                    continue
+                if os.stat(smi_file).st_size == 0:
+                    os.remove(smi_file)
+                    continue
+                os.chdir(sub_info_path)
+                with open(a_formula, 'wb') as f:
+                    f.write(out.stderr)
+                end_time = time.time()
+                duration = round(end_time - start_time, 2)
+                with open(a_formula, 'a') as f:
+                    f.write('\nTime:\n' + str(duration) + 's\n')
+
+
+
