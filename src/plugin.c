@@ -12,7 +12,7 @@
        if (POPCOUNT(g[ii] & g[jj]) >= 3) return 1; }\
 
 
-static boolean Yswitch = FALSE;
+static _Boolean Yswitch = FALSE;
 #define SURGEPLUGIN_SWITCHES  SWBOOLEAN('Y',Yswitch)
 
 static int oxygenindex = -1;

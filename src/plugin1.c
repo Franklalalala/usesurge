@@ -5,7 +5,7 @@
 #define HELPTEXT2 \
 " -F# -F#:# Specify number of atoms with exactly 4 non-H neighbours\n"
 
-static boolean Fswitch = FALSE;
+static _Boolean Fswitch = FALSE;
 static long Fmin,Fmax;
 
 #define SURGEPLUGIN_STEP1 \

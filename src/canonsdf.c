@@ -299,9 +299,9 @@ decode(int numlines, int *n, int *which, int *hyd,
     }
 }
 
-static boolean
+static _Boolean
 isgood(int n, int *which, int *hyd, int nb, int *u, int *v,
-       int *mult, boolean aswitch, int dmax, int cmax,
+       int *mult, _Boolean aswitch, int dmax, int cmax,
        long mine, long maxe, char *neededhash)
 {
     int deg[MAXN];
@@ -343,9 +343,9 @@ int
 main(int argc, char *argv[])
 {
     long long nin,nout;
-    boolean badargs;
-    boolean eswitch,pswitch,aswitch,dswitch,cswitch;
-    boolean Hswitch,wswitch,uswitch,Aswitch;
+    _Boolean badargs;
+    _Boolean eswitch,pswitch,aswitch,dswitch,cswitch;
+    _Boolean Hswitch,wswitch,uswitch,Aswitch;
     int numlines,maxd,maxc;
     int i,j,n,nb;
     int u[2*MAXN],v[2*MAXN],mult[2*MAXN],which[MAXN],hyd[MAXN];

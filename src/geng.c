@@ -148,7 +148,7 @@ OUTPROC feature.
    nauty format, and n is the number of vertices. Your procedure
    can be in a separate file so long as it is linked with geng. The
    global variables sparse6, graph6, quiet, nooutput, nautyformat,
-   yformat and canonise (all type boolean) can be used to test
+   yformat and canonise (all type _Boolean) can be used to test
    for the presence of the flags -s, -g, -q, -u, -n, -y and -l,
    respectively. If -l is present, the group size and similar
    details can be found in the global variable nauty_stats.
@@ -417,19 +417,19 @@ static void (*outproc)(FILE*,graph*,int);
 
 static FILE *outfile;           /* file for output graphs */
 static int connec;              /* 1 for -c, 2 for -C, 0 for neither */
-static boolean bipartite;       /* presence of -b */
-static boolean trianglefree;    /* presence of -t */
-static boolean squarefree;      /* presence of -f */
-static boolean savemem;         /* presence of -m */
-static boolean verbose;         /* presence of -v */
-boolean nautyformat;            /* presence of -n */
-boolean yformat;                /* presence of -y */
-boolean graph6;                 /* presence of -g */
-boolean sparse6;                /* presence of -s */
-boolean nooutput;               /* presence of -u */
-boolean canonise;               /* presence of -l */
-boolean quiet;                  /* presence of -q */
-boolean header;                 /* presence of -h */
+static _Boolean bipartite;       /* presence of -b */
+static _Boolean trianglefree;    /* presence of -t */
+static _Boolean squarefree;      /* presence of -f */
+static _Boolean savemem;         /* presence of -m */
+static _Boolean verbose;         /* presence of -v */
+_Boolean nautyformat;            /* presence of -n */
+_Boolean yformat;                /* presence of -y */
+_Boolean graph6;                 /* presence of -g */
+_Boolean sparse6;                /* presence of -s */
+_Boolean nooutput;               /* presence of -u */
+_Boolean canonise;               /* presence of -l */
+_Boolean quiet;                  /* presence of -q */
+_Boolean header;                 /* presence of -h */
 statsblk nauty_stats;
 static int mindeg,maxdeg,maxn,mine,maxe,mod,res;
 #define PRUNEMULT 50   /* bigger -> more even split at greater cost */
@@ -620,7 +620,7 @@ writenauty(FILE *f, graph *g, int n)
 
 /*********************************************************************/
 
-static boolean
+static _Boolean
 isconnected(graph *g, int n)
 /* test if g is connected */
 {
@@ -642,7 +642,7 @@ isconnected(graph *g, int n)
     return  seen == allbits;
 }
 
-static boolean
+static _Boolean
 connpreprune(graph *g, int n, int maxn)
 /* This function speeds up the generation of connected graphs
    with not many edges. */
@@ -679,7 +679,7 @@ connpreprune(graph *g, int n, int maxn)
 
 /**********************************************************************/
  
-static boolean
+static _Boolean
 isbiconnected(graph *g, int n)
 /* test if g is biconnected */
 {
@@ -742,7 +742,7 @@ gcomplement(graph *g, graph *gc, int n)
 
 /**********************************************************************/
 
-static boolean
+static _Boolean
 distinvar(graph *g, int *invar, int n)
 /* make distance invariant
    return FALSE if n-1 not maximal else return TRUE */
@@ -988,7 +988,7 @@ arith(xword a, xword b, xword c)
 /**************************************************************************/  
 
 static void
-makeleveldata(boolean restricted)
+makeleveldata(_Boolean restricted)
 /* make the level data for each level */
 {
     long h;
@@ -1226,7 +1226,7 @@ userautomprocb(int count, int *p, int *orbits,
 
 static void
 refinex(graph *g, int *lab, int *ptn, int level, int *numcells,
-     int *count, set *active, boolean goodret, int *code, int m, int n)
+     int *count, set *active, _Boolean goodret, int *code, int m, int n)
 {
     int i,c1,c2,labc1;
     setword x,lact;
@@ -1377,8 +1377,8 @@ makecanon(graph *g, graph *gcan, int n)
 
 /**************************************************************************/
 
-static boolean
-accept1(graph *g, int n, xword x, graph *gx, int *deg, boolean *rigid)
+static _Boolean
+accept1(graph *g, int n, xword x, graph *gx, int *deg, _Boolean *rigid)
 /* decide if n in theta(g+x) -  version for n+1 < maxn */
 {
     int i;
@@ -1476,8 +1476,8 @@ accept1(graph *g, int n, xword x, graph *gx, int *deg, boolean *rigid)
 
 /**************************************************************************/
 
-static boolean
-accept1b(graph *g, int n, xword x, graph *gx, int *deg, boolean *rigid,
+static _Boolean
+accept1b(graph *g, int n, xword x, graph *gx, int *deg, _Boolean *rigid,
      void (*makeh)(graph*,xword*,int))
 /* decide if n in theta(g+x)  --  version for n+1 < maxn */
 {
@@ -1597,8 +1597,8 @@ accept1b(graph *g, int n, xword x, graph *gx, int *deg, boolean *rigid,
 
 /**************************************************************************/
 
-static boolean
-accept2(graph *g, int n, xword x, graph *gx, int *deg, boolean nuniq)
+static _Boolean
+accept2(graph *g, int n, xword x, graph *gx, int *deg, _Boolean nuniq)
 /* decide if n in theta(g+x)  --  version for n+1 == maxn */
 {
     int i;
@@ -1614,7 +1614,7 @@ accept2(graph *g, int n, xword x, graph *gx, int *deg, boolean nuniq)
     statsblk stats;
     static DEFAULTOPTIONS_GRAPH(options);
     setword workspace[50];
-    boolean cheapacc;
+    _Boolean cheapacc;
 
 #ifdef INSTRUMENT
     ++a2calls;
@@ -1849,7 +1849,7 @@ xbnds(int n, int ne, int dmax)
 /**************************************************************************/
 
 static void
-spaextend(graph *g, int n, int *deg, int ne, boolean rigid,
+spaextend(graph *g, int n, int *deg, int ne, _Boolean rigid,
       int xlb, int xub, void (*makeh)(graph*,xword*,int))
 /* extend from n to n+1 -- version for restricted graphs */
 {
@@ -1859,10 +1859,10 @@ spaextend(graph *g, int n, int *deg, int ne, boolean rigid,
     graph gx[MAXN];
     xword *xx,ixx;
     int degx[MAXN];
-    boolean rigidx;
+    _Boolean rigidx;
 
 #ifdef INSTRUMENT
-    boolean haschild;
+    _Boolean haschild;
 
     haschild = FALSE;
     if (rigid) ++rigidnodes[n];
@@ -1966,7 +1966,7 @@ spaextend(graph *g, int n, int *deg, int ne, boolean rigid,
 /**************************************************************************/
 
 static void
-genextend(graph *g, int n, int *deg, int ne, boolean rigid, int xlb, int xub)
+genextend(graph *g, int n, int *deg, int ne, _Boolean rigid, int xlb, int xub)
 /* extend from n to n+1 -- version for general graphs */
 {
     xword x,d,dlow;
@@ -1976,10 +1976,10 @@ genextend(graph *g, int n, int *deg, int ne, boolean rigid, int xlb, int xub)
     int xlbx,xubx;
     graph gx[MAXN];
     int degx[MAXN];
-    boolean rigidx;
+    _Boolean rigidx;
 
 #ifdef INSTRUMENT
-    boolean haschild;
+    _Boolean haschild;
 
     haschild = FALSE;
     if (rigid) ++rigidnodes[n];
@@ -2088,8 +2088,8 @@ main(int argc, char *argv[])
 #endif
 {
     char *arg;
-    boolean badargs,gote,gotmr,gotf,gotd,gotD,gotx,gotX;
-    boolean secret,connec1,connec2,safe,sparse;
+    _Boolean badargs,gote,gotmr,gotf,gotd,gotD,gotx,gotX;
+    _Boolean secret,connec1,connec2,safe,sparse;
     char *outfilename,sw;
     int i,j,argnum;
     graph g[1];

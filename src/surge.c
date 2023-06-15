@@ -126,27 +126,27 @@ static int maxtype[8]; /* maxtype[d] is maximum index into
                     elementtype/elementcount for vertices of degree d */
 
 /* Used with -A */
-static boolean alphabetic;
+static _Boolean alphabetic;
 static int newlabel[MAXN];  /* New number of atom i */
 
 #define BADLISTS 9     /* Number of defined bad lists */
-static boolean bad1;    /* Avoid triple edges in rings up to length 7 */
+static _Boolean bad1;    /* Avoid triple edges in rings up to length 7 */
       /* bad1 is turned off if -T is given */
-static boolean bad2;    /* Bredt's rule for one common bond */
-static boolean bad3;    /* Bredt's rule for two common bonds */
-static boolean bad4;    /* Bredt's rule for three common bonds */
-static boolean bad5;    /* Avoid =A= even if not in a ring */
-static boolean bad6;    /* Avoid =A= in rings up to length 8 */
+static _Boolean bad2;    /* Bredt's rule for one common bond */
+static _Boolean bad3;    /* Bredt's rule for two common bonds */
+static _Boolean bad4;    /* Bredt's rule for three common bonds */
+static _Boolean bad5;    /* Avoid =A= even if not in a ring */
+static _Boolean bad6;    /* Avoid =A= in rings up to length 8 */
       /* Note that bad6 is turned off if bad5 is set */
-static boolean bad7;    /* Avoid K_{2,4} and K_{3,3} */
-static boolean bad8;    /* Avoid cone(P4) and K4 with 3-ear */
+static _Boolean bad7;    /* Avoid K_{2,4} and K_{3,3} */
+static _Boolean bad8;    /* Avoid cone(P4) and K4 with 3-ear */
       /* bad8 is turned off if -t and -f options make it impossible */
-static boolean bad9;    /* No atom on two rings of length 3 or 4 */
+static _Boolean bad9;    /* No atom on two rings of length 3 or 4 */
       /* bad9 is turned off if -t and -f options make it impossible */
 
-static boolean needcoordtest;
+static _Boolean needcoordtest;
 
-static boolean needcycles;
+static _Boolean needcycles;
 static int maxcycles=0;
 #define MAXCYCLES 200
 static setword inducedcycle[MAXCYCLES];
@@ -160,29 +160,29 @@ static counter vcolgnontriv=0,vcolgout=0;
 static counter multignontriv=0,multigout=0;
 static long maxvgroup,maxegroup;
 
-static boolean uswitch;  /* suppress output */
-static boolean verbose;  /* print more information to stderr */
+static _Boolean uswitch;  /* suppress output */
+static _Boolean verbose;  /* print more information to stderr */
 static int outlevel;  /* 1 = geng only, 2 = geng+vcolg,
                        3 = geng+vcolg+multig, 4 = everything */
-static boolean smiles;  /* output in SMILES format */
+static _Boolean smiles;  /* output in SMILES format */
 static int maxbond;  /* maximum mult -1 of bonds (1 if -t, else 2) */
 
-static boolean planar;  /* Molecules must be planar */
+static _Boolean planar;  /* Molecules must be planar */
 static int maxcoord;  /* Maximum coordination number allowed */        //UNUSED
-static boolean xswitch;  /* Undocumented, used for development */
+static _Boolean xswitch;  /* Undocumented, used for development */
 
 /* In the following, the counts are only meaningful if the
-   corresponding boolean is true. */
-static boolean tswitch;
+   corresponding _Boolean is true. */
+static _Boolean tswitch;
 static long min3rings,max3rings;  /* number of rings of length 3 */
 static int count3ring[MAXN+1];
-static boolean fswitch;
+static _Boolean fswitch;
 static long min4rings,max4rings;  /* number of rings of length 4 */
 static int count4ring[MAXN+1];
-static boolean pswitch;
+static _Boolean pswitch;
 static long min5rings,max5rings;  /* number of rings of length 5 */
 static int count5ring[MAXN+1];
-static boolean bipartite;
+static _Boolean bipartite;
 
 /* The following is only used if bad9 is selected */
 static setword cycle34verts[MAXN+1];  /* set of vertices on rings
@@ -214,7 +214,7 @@ static FILE *outfile;
 #ifdef ZLIB
 static gzFile gzoutfile;
 #endif
-static boolean gzip;
+static _Boolean gzip;
 
 /* Macros for appending to a string using pointer p */
 #define PUTINT(xx) { unsigned long ul = (xx); char *sp,s[15]; \
@@ -233,7 +233,7 @@ static boolean gzip;
 static struct elementstruct
 {
     char *inputname,*name;
-    boolean organic;  /* Belongs to organic subset */
+    _Boolean organic;  /* Belongs to organic subset */
     int valence;
     int lowervalence;  /* Next lower valence, or 0 if none */
     int maxcoord; /* Maximum number of distinct neighbours including H */
@@ -420,7 +420,7 @@ void dummy()
 
 /******************************************************************/
 
-static boolean
+static _Boolean
 isplanar(graph *g, int n)
 /* Check if g is planar, assuming g is connected */
 {
@@ -431,7 +431,7 @@ isplanar(graph *g, int n)
     int i,j,k,pop,nv,ne,c;
     int edge_pos,v,w;
     setword ww;
-    boolean ans;
+    _Boolean ans;
     graph h[MAXN];
     int newlab[MAXN];
     setword queue;
@@ -779,7 +779,7 @@ gotone(int *vcol, int n, int *hyd, int *mult, int ne, int level)
 
 /******************************************************************/
 
-static boolean
+static _Boolean
 testemax(int *mult, int ne, int level)
 /* Test if edge colouring is maximum wrt group. */
 {
@@ -1081,7 +1081,7 @@ vcolgoutput(graph *g, int *vcolindex, int n)
 
 /******************************************************************/
 
-static boolean
+static _Boolean
 testvmax(int *colindex, int n)
 /* Test if vertex colouring is maximum wrt group. If so, return group.
    If not, return a safe level to return to. */
@@ -1529,7 +1529,7 @@ smilesdfs(graph *g, setword *seen, int v, int par, graph *back,
 {
     setword gv,w;
     int k;
-    boolean first;
+    _Boolean first;
 
     gv = g[v];
     first = TRUE;
@@ -2340,8 +2340,8 @@ main(int argc, char *argv[])
 {
     int a = 1;
     int argnum,i,j;
-    boolean badargs,Gswitch,mswitch,Oswitch,eswitch,notriples;
-    boolean oswitch,Bswitch,cswitch,Dswitch;
+    _Boolean badargs,Gswitch,mswitch,Oswitch,eswitch,notriples;
+    _Boolean oswitch,Bswitch,cswitch,Dswitch;
     char *extra1,*extra2,*formula,*arg,sw,*outfilename;
     long res,mod;
     int mine,maxe,maxd,maxc;

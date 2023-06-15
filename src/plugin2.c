@@ -4,7 +4,7 @@
 #define HELPTEXT2 \
 " This version forbids adjacent oxygen atoms if -Y is given.\n"
 
-static boolean Yswitch = FALSE;
+static _Boolean Yswitch = FALSE;
 #define SURGEPLUGIN_SWITCHES  SWBOOLEAN('Y',Yswitch)
 
 static int oxygenindex = -1;
